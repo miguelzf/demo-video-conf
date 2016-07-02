@@ -1,18 +1,20 @@
-<!DOCTYPE html>
 <html>
-
 <head>
-  <title>demo-video-chat</title>
+  <title>Demo for Video-Conf App</title>
 </head>
-
 <body>
+  <h2>Demo for Video-Conf App</h2>
+
   <div id="content"></div>
+  <p>Welcome to this Demo</p>
+  <p> <%= test %></p>
+
   <!-- build:production -->
   <script src="jspm_packages/system.js"></script>
   <script src="config.js"></script>
 
   <script>
-    System.import('index');
+    //System.import('index');
 
    if (location.origin.match(/localhost/)) 
    {
@@ -25,5 +27,4 @@
   </script>
   <!-- endbuild -->
 </body>
-
 </html>

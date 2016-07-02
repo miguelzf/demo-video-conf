@@ -11,7 +11,7 @@ export default class NameLoader extends Component {
   }
 
   handleClick() {
-    fetch('/api')
+    fetch('/appname')
       .then(response => response.text())
       .then(text => this.setState({ appName: text }));
   }

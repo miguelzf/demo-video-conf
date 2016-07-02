@@ -9,6 +9,7 @@
     "postinstall": "jspm install"
   },
   "dependencies": {
+    "ejs": "^2.5.5",
     "express": "^4.13.3",
     "express-react-views": "^0.10.0",
     "morgan": "^1.6.1",

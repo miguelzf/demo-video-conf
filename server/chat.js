@@ -3,9 +3,6 @@
 const express = require('express');
 const router = express.Router();
 
-const appname = 'demo-video-chat';
-
-
 // User list support
 
 const users = {};
@@ -36,6 +33,5 @@ router.post('/users/add', (req, res, next) => {
 
 
 module.exports = {
-  appname: appname,
   router: router
 };

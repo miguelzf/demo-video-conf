@@ -18,8 +18,8 @@ if (app.get('env') !== 'production' && app.get('env') !== 'test') {
 
 // Use React for server side view rendering
 app.set('views', __dirname + '/view');
-app.set('view engine', 'jsx');
-app.engine('jsx', expressReact.createEngine());
+app.set('view engine', 'ejs');
+//app.engine('ejs', expressReact.createEngine());
 
 
 function print(s) { console.log(s); }
@@ -27,12 +27,20 @@ function print(s) { console.log(s); }
 // Routes go here
 // Sample route that returns the app name
 const chatrouter = require('./chat').router;
-app.use('/api', chatrouter);
+app.use('/chat', chatrouter);
 
-app.get('/aaa', (req, res, next) => {
+const appname = 'demo-video-chat';
+
+// Return list of users online
+app.get('/appname', (req, res, next) => {
+  res.end(appname);
+});
+
+
+app.get('/', (req, res, next) => {
 //  res.end(appname);
   print("Fetch root");
-  res.render('index')
+  res.render('index', {test: 'aa'})
 });
 
 // catch 404 and forward to error handler
@@ -59,7 +67,7 @@ app.use((err, req, res, next) => {
     });
   }
 
-  res.render('error', error);
+  res.render('error', { error: error });
 });
 
 module.exports = app;
