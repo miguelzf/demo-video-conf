@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>demo-video-chat</title>
+</head>
+
+<body>
+  <div id="content"></div>
+  <!-- build:production -->
+  <script src="jspm_packages/system.js"></script>
+  <script src="config.js"></script>
+
+  <script>
+    System.trace = true;
+    System.import('index');
+
+   // if (location.origin.match(/localhost/)) 
+   {
+      System.trace = true;
+      System.import('capaj/systemjs-hot-reloader').then(function(HotReloader) {
+        new HotReloader.default('http://localhost:3000');
+      });
+    }
+
+  </script>
+  <!-- endbuild -->
+</body>
+
+</html>
