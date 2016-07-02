@@ -1,4 +1,4 @@
-import NameLoaderView from '../../src/client/app/view/NameLoaderView';
+import NameLoaderView from '../../client/app/view/NameLoaderView';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';

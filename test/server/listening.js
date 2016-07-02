@@ -2,7 +2,7 @@
 
 const request = require('superagent');
 const getServerUrl = require('./util/address');
-const serverModule = require('../../src/server/server');
+const serverModule = require('../../server/server');
 const server = serverModule.server;
 const port = serverModule.port;
 

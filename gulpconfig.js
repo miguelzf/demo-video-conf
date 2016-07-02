@@ -27,15 +27,15 @@ const config = {
 
   // Client side static source files location
   // default: 'src/client/static'
-  clientStaticDir: 'src/client/static',
+  clientStaticDir: 'client/static',
 
   // Client side script source files location
-  // default: 'src/client/app'
-  clientScriptDir: 'src/client/app',
+  // default: 'client/app'
+  clientScriptDir: 'client/app',
 
   // Server side source files location
-  // default: 'src/server'
-  serverSourceDir: 'src/server',
+  // default: 'server'
+  serverSourceDir: 'server',
 
   // Server tests source files location
   // default: 'test/server'

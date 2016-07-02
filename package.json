@@ -2,7 +2,7 @@
   "name": "demo-video-chat",
   "version": "0.0.0",
   "scripts": {
-    "start": "nodemon src/server/server.js",
+    "start": "nodemon server/server.js",
     "test": "npm run test-client && npm run test-server",
     "test-client": "mocha test/client/ --compilers js:babel-register --require=env-test",
     "test-server": "mocha test/server/ --require=env-test",
@@ -43,7 +43,7 @@
   },
   "jspm": {
     "directories": {
-      "baseURL": "src/client/app"
+      "baseURL": "client/app"
     },
     "dependencies": {},
     "devDependencies": {
