@@ -1,13 +1,31 @@
 <html>
 <head>
-  <title>Demo for Video-Conf App</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Demo for Video-Conf App</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
 </head>
 <body>
+  <div style="padding-left: 20%;">
   <h2>Demo for Video-Conf App</h2>
 
   <div id="content"></div>
   <p>Welcome to this Demo</p>
   <p> <%= test %></p>
+
+  <form action="/chat/users/enter" method="post" class="form-inline">
+    <div class="form-group" style="width:30%;">
+      <!--label for="username">User Name </label-->
+      <input type="text" class="form-control" id="username" name="username" aria-describedby="Chat username" placeholder="Enter username">
+      <!--small id="usernameHelp" class="form-text text-muted">Something quircky and fun.</small-->
+    </div>
+    <button type="submit" class="btn btn-primary">Go Chat</button>
+  </form>
 
   <!-- build:production -->
   <script src="jspm_packages/system.js"></script>
@@ -16,7 +34,7 @@
   <script>
     //System.import('index');
 
-   if (location.origin.match(/localhost/)) 
+   if (false &&location.origin.match(/localhost/))
    {
       System.trace = true;
       System.import('capaj/systemjs-hot-reloader').then(function(HotReloader) {
@@ -25,6 +43,13 @@
     }
 
   </script>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
   <!-- endbuild -->
+  </div>
 </body>
 </html>

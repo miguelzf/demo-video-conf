@@ -9,9 +9,13 @@
     "postinstall": "jspm install"
   },
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
     "ejs": "^2.5.5",
     "express": "^4.13.3",
     "express-react-views": "^0.10.0",
+    "express-session": "^1.14.2",
     "morgan": "^1.6.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",

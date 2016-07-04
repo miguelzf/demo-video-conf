@@ -3,8 +3,8 @@
     <title>Error</title>
   </head>
   <body style={{ padding: '50px', font: '14px "Lucida Grande", Helvetica, Arial, sans-serif' }}>
-    <h1><%= error.status %> - <%= error.title %></h1>
+    <h1><%= error.status %> - <%= error.type %></h1>
     <p><%= error.message %></p>
-    <pre><% process.env.NODE_ENV === 'production' ? '' : error.stack %></pre>
+    <pre><%= error.stack %></pre>
   </body>
 </html>

@@ -4,8 +4,11 @@ const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
 const morgan = require('morgan');
-const expressReact = require('express-react-views');
-const ErrorMessage = require('./lib/error-message');
+// const expressReact = require('express-react-views');
+//const ErrorMessage = require('./lib/error-message');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const flash = require('connect-flash');
 
 const app = express();
 app.use(favicon(path.join(__dirname, '/../client/static/favicon.ico')));
@@ -22,12 +25,13 @@ app.set('view engine', 'ejs');
 //app.engine('ejs', expressReact.createEngine());
 
 
-function print(s) { console.log(s); }
+function print(s,o) { console.log(s,o); }
 
-// Routes go here
-// Sample route that returns the app name
-const chatrouter = require('./chat').router;
-app.use('/chat', chatrouter);
+// Router for '/chat'
+var chatrouter = require('./chat')
+var users = chatrouter.users;
+app.use('/chat', chatrouter.router);
+
 
 const appname = 'demo-video-chat';
 
@@ -35,7 +39,6 @@ const appname = 'demo-video-chat';
 app.get('/appname', (req, res, next) => {
   res.end(appname);
 });
-
 
 app.get('/', (req, res, next) => {
 //  res.end(appname);
@@ -45,29 +48,26 @@ app.get('/', (req, res, next) => {
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  const error = new ErrorMessage({
-    title: 'Not Found',
+  const error = {
+    type: 'Not Found',
     status: 404,
     message: 'The requested resource could not be found.',
     stack: new Error().stack
-  });
+  };
   next(error);
 });
 
-app.use((err, req, res, next) => {
-  let error;
-  if (err instanceof ErrorMessage) {
-    error = err;
-  } else {
-    error = new ErrorMessage({
-      title: err.name || 'Internal Server Error',
-      status: err.status || 500,
-      message: 'Something went wrong',
-      stack: err.stack || new Error().stack
-    });
-  }
 
-  res.render('error', { error: error });
+app.use((err, req, res, next) => {
+  if (!err.type)
+    err.type = 'Internal Server Error'
+  if (!err.status)
+    err.status = 500;
+
+  res.render('error', { error: err });
 });
 
-module.exports = app;
+module.exports = {
+	app: app,
+	users: users
+}
