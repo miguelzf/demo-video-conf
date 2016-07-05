@@ -24,19 +24,12 @@ module.exports = function chatserver(httpapp, users) {
       socket.emit('users', uservals);
     };
 
-    // First send the current users
     sendUserList();
 
-    // Send the last 10msgs
-    var lasmsg = [];
-    for (var i=messages.length-1, z=0; z<10 && i>0; i--, z++)
-      lasmsg.push(messages[i]);
+    // Send the last messages
+    var lasmsg = messages.slice(messages.length-10, messages.length-1);
     socket.emit('messages', lasmsg.reverse());
     print("Last Msgs:" + lasmsg.reverse());
-
-    socket.on('errorr  ', function(d) {
-      print("RECEIVED ERROR???", d);
-    });
 
     // When a new user arrive
     socket.on('user', function (username) {
@@ -60,10 +53,7 @@ module.exports = function chatserver(httpapp, users) {
       user.color  = get_random_color();
       socket.user = user;
 
-      // Ack the user
-      //socket.emit('okuser', user);
-
-      // Update the other users
+      // Send new user info to all other connected clients
       socket.broadcast.emit('addUser', user);
     });
 
@@ -94,7 +84,7 @@ module.exports = function chatserver(httpapp, users) {
       print("Incoming msg", data);
       var user = socket.user;
 
-      var msg = {name: data.user, msg: data.msg, time: new Date(), color: users[data.user].color};
+      var msg = {name: user, msg: msg, time: new Date(), color: user.color};
       messages.push(msg);
 
       // Send to all
