@@ -28,15 +28,28 @@ function print(s,o) {
   else console.log(s);
 }
 
+var getRandomInt = function(min, max) {
+  if (!max) {
+    max = min;
+    min = 0;
+  }
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+
 // User list support
 
-const users = {miguel: {name: 'miguel', ip: '127.0.0.1'}};
+const users = {};
 
 // Return list of users online
 router.get('/', (req, res, next) => {
   var u = req.flash('user');
-  if (!u || u.length == 0)
-    u = 'miguel';
+
+  // testdata:
+  if (!u || u.length == 0) {
+    var u = 'guest' + getRandomInt(1000000);
+    users[u] = {name: u, ip: '127.0.0.1'};
+  }
 
   if (!u || !users[u]) {
     const error = {
@@ -48,7 +61,9 @@ router.get('/', (req, res, next) => {
     return next(error);
   }
 
-  res.render('chat', {user: u});
+  var serverLocation = req.headers.host;
+
+  res.render('chat', {user: u, host: serverLocation});
 });
 
 // Return list of users online
@@ -63,6 +78,16 @@ router.post('/users/enter', (req, res, next) => {
   const ip = req.connection.remoteAddress;
   print("ADD user " + user);
 
+  if (!user) {
+    const error = {
+      type: 'Must specify user',
+      status: 404,
+      message: 'Received invalid or null user',
+      //stack: new Error().stack
+    }
+    return next(error);
+  }
+
   if (users[user]) {
     const error = {
       type: 'Already Exists',
@@ -72,12 +97,10 @@ router.post('/users/enter', (req, res, next) => {
     }
     return next(error);
   }
-
   users[user] = {name: user, ip: ip};
   req.flash('user', user);
   res.redirect('/chat');
 });
-
 
 
 module.exports = {

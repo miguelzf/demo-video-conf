@@ -10,32 +10,37 @@ export default  class ChatInput extends React.Component {
     this.state = { text:'' };
     this.changeText = this.changeText.bind(this);
     this.catchEnter = this.catchEnter.bind(this);
+    this.sendMsg    = this.sendMsg.bind(this);
   }
 
   changeText(e){
     this.setState({ text : e.target.value });
   }
 
+  sendMsg() {
+    var text = this.state.text.slice();
+    this.setState({text: ''});
+    this.props.socket.emit('message', {user: this.props.username, msg: text});
+  }
+
   catchEnter(e) {
     if (e.keyCode == 13) {
-      var text = this.state.text;
-      this.setState({text: ''});
-      this.props.socket.emit('message', {user: this.props.username, msg: text});
+      this.sendMsg();
     }
   }
 
   render(){
+    console.log("Render Input Areaa");
 
-    var style = {
-      width:'100%',
-      height:'100%',
-      boxSizing: 'border-box',
-      MozBoxSizing: 'border-box'
-    };
     return (
-      <input id="chatinput" className="chatInput" placeholder="Chat away.."
-          value={this.state.text} onChange={this.changeText} onKeyUp={this.catchEnter} style={style}>
-      </input>
+      <div className="write-form">
+        <textarea placeholder="Type your message" id="texxt" rows="2"
+                   value={this.state.text} onChange={this.changeText} onKeyUp={this.catchEnter}>
+        </textarea>
+        <i className="fa fa-picture-o"></i>
+        <i className="fa fa-file-o"></i>
+        <span className="send" onClick={this.sendMsg}>Send</span>
+      </div>
     )
   }
 }

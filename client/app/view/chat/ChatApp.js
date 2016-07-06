@@ -23,15 +23,9 @@ export default class ChatApp extends React.Component {
   }
 
   remUser (username) {
-    print('Rem User', username);
-    this.setState(function (prev, props) {
-      var i;
-      for (i = 0; i < prev.users.length; i += 1)
-        if (prev.users[i].name == username)
-          break;
-
-      return { users: prev.users.splice(i) };
-    });
+    print('Rem User: '+ username);
+    this.setState ((prev, props) =>
+      ({users : prev.users.filter(el => el.name !== username) }))
   }
 
   onMsgs (msgs) {
@@ -46,15 +40,16 @@ export default class ChatApp extends React.Component {
     if (users.constructor !== Array)
       users = [users];
 
-    print('Received users ' + users.length, users);
-    this.setState((prev, props) => ({
-      users: prev.users.concat(users)
-    }));
+    print('Received users ' + users.length);
+    this.setState((prev, props) => {
+      var newUsers = users.filter(el => !prev.users.find(u => u.name === el.name))
+      return {users: prev.users.concat(newUsers)}
+    });
   }
 
   componentDidMount() {
-
-    var socket = io.connect('localhost:4000');
+    print("Connect to Socket.IO server at " + host);
+    var socket = io.connect(host);
     this.setState({socket: socket});
 
     socket.on('users',  this.onUsers);
@@ -72,37 +67,47 @@ export default class ChatApp extends React.Component {
       window.location.href = '/';
     });
 
+    // Server sent an error
+    socket.on('error', function (msg) {
+      alert('Connection ERROR!!: ' + msg);
+      socket.close();
+      window.location.href = '/';
+    })
+
+    socket.on('disconnect', function (msg) {
+      console.error("Connection lost");
+      socket.close();
+    });
+
     print("Send User: " + this.state.username);
     socket.emit('user', this.state.username);
   }
 
   render(){
-   return (
-    <div className="chatApp">
-      <div className="row" style={{"height" : "70%"}}>
-        <div className="col-sm-2 cold-md-2 col-lg-2">
-          <div className="panel panel-default">
-            <div className="panel-heading">Online users</div>
-            <UserList users={this.state.users}> </UserList>
+    return (
+      <div className="ui">
+        <div className="left-menu">
+          <form action="#" className="search">
+            <input placeholder="search..." type="search" name="" id=""/>
+            <input type="submit" value="&#xf002;"/>
+          </form>
+          <UserList users={this.state.users}> </UserList>
+        </div>
+
+        <div className="chat">
+          <div className="top">
+            <div className="avatar">
+              <img width="50" height="50" src="foto.jpg" />
+            </div>
+            <div className="info">
+              <div className="name">{this.state.username}</div><div className="count">{this.state.msgs.length} messages</div>
+            </div>
+            <i className="fa fa-star"></i>
           </div>
-        </div>
-
-        <div className="col-sm-10 cold-md-10 col-lg-10">
           <ChatArea msgs={this.state.msgs}> </ChatArea>
-        </div>
-      </div>
-       <br></br>
-
-      <div className="row" style={{"height" : "10%"}}>
-        <div className="col-sm-2 cold-md-2 col-lg-2">
-          <button type="submit" className="btn btn-primary">Video Chat</button>
-        </div>
-
-        <div className="col-sm-10 cold-md-10 col-lg-10">
           <ChatInput socket={this.state.socket} user={this.state.username}></ChatInput>
         </div>
       </div>
-    </div>
     );
   }
 }

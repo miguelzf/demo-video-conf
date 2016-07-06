@@ -7,29 +7,40 @@
     <title>Demo for Video-Conf App</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!--link rel="stylesheet" href="style/bootstrap.css"-->
+    <link rel="stylesheet" href="style/normalize.css">
+    <link rel="stylesheet" href="style/chat.css">
 
 </head>
 <body>
 <div class="container">
   <div class="row">
-  <h2>Chat Window</h2>
+    <h2>Chat with All Online Users</h2>
 
-  <div id="content"></div>
-  <p>Welcome, <%= user %></p>
+    <div id="content"></div>
+    <p>Welcome, <%= user %></p>
   </div>
 
   <div id="chat-app"></div>
 
+
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js'></script>
+
   <script src="jspm_packages/system.js"></script>
   <script src="config.js"></script>
+  <script src="chat-build.js"></script>
 
   <script>
-	var curruser = '<%= user %>';
-    System.import('chat');
+    // receive data from server ejs:
+    var curruser = '<%= user %>';
+    var host = '<%= host %>'
 
-   if (false && location.origin.match(/localhost/)) 
-   {
+    System.import('chat.js');
+
+    if (false && location.origin.match(/localhost/))
+    {
       System.trace = true;
       System.import('capaj/systemjs-hot-reloader').then(function(HotReloader) {
         new HotReloader.default('http://localhost:3000');
@@ -44,7 +55,16 @@
   <script src="jquery.timer.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js" type="text/javascript" ></script-->
 
+  <script>
+    var getRandomInt = function(min, max) {
+      if (!max) {
+        max = min;
+        min = 0;
+      }
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
 
+  </script>
   </div>
 </body>
 </html>

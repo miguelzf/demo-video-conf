@@ -8,6 +8,17 @@ function print(s,o) {
 
 module.exports = function chatserver(httpapp, users) {
 
+// test data:
+  for (var i = 0; i < 10; i++) {
+    var msg = {name: 'teste'+i, msg: 'nsdgdfsgdf  sdhg dsfaj '+i,
+     time: new Date(Date.now()+i*100000), color: get_random_color(), sid: null};
+    messages.push(msg);
+  }
+
+  for (var i = 0; i < 2; i++)
+    users['test'+i] = {name: 'test'+i, ip: '127.0.0.1', color: get_random_color(), sid: null};
+/////////////
+
   var io = require('socket.io').listen(httpapp);
 
   // Socket server
@@ -55,6 +66,9 @@ module.exports = function chatserver(httpapp, users) {
 
       // Send new user info to all other connected clients
       socket.broadcast.emit('addUser', user);
+
+      // teste:
+      // setTimeout(function() { socket.emit('remUser', 'test1')}, 5000);
     });
 
     // Request for updated users lists
@@ -71,24 +85,26 @@ module.exports = function chatserver(httpapp, users) {
 
     // When a user leaves
     socket.on('disconnect', function () {
-      var user = socket.user || "";
+      var user = socket.user || {};
       print('User disconnected: ' + user.name);
+      if (!user) return;
+
       delete users[user.name];
 
       // Update the other users
-      io.emit('remUser', user);
+      socket.broadcast.emit('remUser', user.name);
     });
 
     // When a user send a new message
     socket.on('message', function (data) {
-      print("Incoming msg", data);
       var user = socket.user;
+      print("Incoming msg from " + user+':', data);
 
-      var msg = {name: user, msg: msg, time: new Date(), color: user.color};
+      var msg = {name: user.name, msg: data.msg, time: new Date(), color: user.color};
       messages.push(msg);
 
       // Send to all
-      io.emit('messages',[msg]);
+      io.emit('messages', [msg]);
     });
 
   });

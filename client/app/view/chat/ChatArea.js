@@ -4,31 +4,47 @@ import { render } from 'react-dom';
 var Message = React.createClass({
 
   render: function() {
-    var date = new Date(this.props.time).toString().replace(/ GMT.*/, '');
+    var date = new Date(this.props.time).toString();
+    date = date.replace(/ GMT.*/, '').replace(/ 20[0-9][0-9]/, '');
+
+    const isMine = (curruser == this.props.name);
+    const timejsx = <span key="time" className="time">{date}</span>;
+    const namejsx = <span key="name" className="name">{this.props.name}</span>;
+    const inner = isMine? [timejsx, namejsx] : [namejsx, timejsx]
 
     return (
-      <span className="message">
-      { '[' + date + '] ' + this.props.name + ': ' + this.props.msg +'\n' }
-      </span>
+      <li className={isMine ? 'i' : 'friend-chat'}>
+        <div className="head">{inner}</div>
+        <div className="message">{this.props.msg}</div>
+      </li>
     )
   }
 });
 
 export default class ChatArea extends React.Component {
+
+  componentDidMount() {
+    $(".messages").niceScroll({
+      cursorcolor: "#cdd2d6",
+      cursorwidth: "6px",
+      cursorborder: "none"
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const scroll = $(".messages").getNiceScroll(0);
+    scroll.resize();
+    scroll.doScrollTop(999999, 999);
+  }
+
   render (){
-
-  var style = {
-    width:'100%',
-    height:'100%',
-    boxSizing: 'border-box',
-    MozBoxSizing: 'border-box'
-  };
-
+    console.log("Render Chat Area");
     return (
-      <textarea id="chatarea" className="chatWindow" readOnly="readonly" style={style}
-                value={ this.props.msgs.map((msg) =>
-                   <Message key={msg.time} name={msg.name} msg={msg.msg} time={msg.time} /> )} >
-       </textarea>
+      <ul className="messages">
+      { this.props.msgs.map((msg) => 
+        <Message key={msg.time.toString()} name={msg.name} msg={msg.msg} time={msg.time} />
+      )}
+      </ul>
     )
   }
 }

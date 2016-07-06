@@ -4,11 +4,14 @@ import { render } from 'react-dom';
 var User = React.createClass({
   render: function() {
     return (
-      <div className="user" onClick={() => this.props.onClick()}>
-        <div className="panel-body" style={{"padding" : "5px"}}>{this.props.name}</div>
-      </div>
-    );
-  }
+      <li onClick={() => this.props.onClick()}>
+        <img width="50" height="50" src="foto.jpg"/>
+        <div className="info">
+          <div className="user">{this.props.name}</div>
+          <div className="status on">online</div>
+        </div>
+      </li>
+    )}
 });
 
 
@@ -18,15 +21,23 @@ export default class UserList extends React.Component {
     // TODO
   }
 
+  componentDidMount() {
+      $(".list-friends").niceScroll({
+        cursorcolor: "#696c75",
+        cursorwidth: "6px",
+        cursorborder: "none"
+      });
+  }
+
   render () {
+    console.log("USer List");
+
     return (
-      <div className="usersList">
-        <center>
+      <ul className="list-friends">
         { this.props.users.map((user) => 
-          (<User key={user.name} name={user.name} /> )
+          (<User key={user.name} name={user.name} onClick={this.onClick}/> )
         )}
-        </center>
-      </div>
+      </ul>
     )
   }
 }
