@@ -5,7 +5,7 @@ var User = React.createClass({
   render: function() {
     return (
       <li onClick={() => this.props.onClick()}>
-        <img width="50" height="50" src="foto.jpg"/>
+        <img width="50" height="50" src="person.jpg"/>
         <div className="info">
           <div className="user">{this.props.name}</div>
           <div className="status on">online</div>
@@ -62,11 +62,17 @@ export default class UserList extends React.Component {
     console.log("Render User List");
 
     return (
-      <ul className="list-friends">
-        { this.state.users.map((user) =>
-          (<User key={user.name} name={user.name} onClick={this.onClick}/> )
-        )}
-      </ul>
+      <div className="left-menu">
+        <form action="#" className="search">
+          <input placeholder="search..." type="search" name="" id=""/>
+          <input type="submit" value="&#xf002;"/>
+        </form>
+        <ul className="list-friends">
+          { this.state.users.map((user) =>
+            (<User key={user.name} name={user.name} onClick={this.onClick}/> )
+          )}
+        </ul>
+      </div>
     )
   }
 }

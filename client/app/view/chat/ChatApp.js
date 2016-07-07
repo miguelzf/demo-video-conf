@@ -49,21 +49,16 @@ export default class ChatApp extends React.Component {
   render(){
     return (
       <div className="ui">
-        <div className="left-menu">
-          <form action="#" className="search">
-            <input placeholder="search..." type="search" name="" id=""/>
-            <input type="submit" value="&#xf002;"/>
-          </form>
-          <UserList socket={this.state.socket} user={this.state.username}> </UserList>
-        </div>
+        <UserList socket={this.state.socket} user={this.state.username}> </UserList>
 
         <div className="chat">
           <div className="top">
             <div className="avatar">
-              <img width="50" height="50" src="foto.jpg" />
+              <img width="50" height="50" src="person.jpg" />
             </div>
             <div className="info">
-              <div className="name">{this.state.username}</div><div className="count">{this.state.msgs.length} messages</div>
+              <div className="name">{this.state.username}</div>
+              <div className="count">{this.state.msgs.length} messages</div>
             </div>
             <i className="fa fa-star"></i>
           </div>
