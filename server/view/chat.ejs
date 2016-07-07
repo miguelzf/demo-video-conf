@@ -30,14 +30,16 @@
 
   <script src="jspm_packages/system.js"></script>
   <script src="config.js"></script>
-  <script src="chat-build.js"></script>
+  <!--script src="chat-build.js"></script-->
 
   <script>
     // receive data from server ejs:
     var curruser = '<%= user %>';
     var host = '<%= host %>'
 
-    System.import('chat.js');
+	function print(s,s1) { console.log(s); if (s1) console.log(s1); }
+
+    System.import('chat');
 
     if (false && location.origin.match(/localhost/))
     {

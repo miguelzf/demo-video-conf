@@ -17,24 +17,53 @@ var User = React.createClass({
 
 export default class UserList extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = { users: [] };
+    this.remUser = this.remUser.bind(this);
+    this.onUsers = this.onUsers.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.socket.on('users',  this.onUsers);
+    this.props.socket.on('addUser', this.onUsers);
+    this.props.socket.on('remUser', this.remUser);
+
+    $(".list-friends").niceScroll({
+        cursorcolor: "#696c75",
+        cursorwidth: "6px",
+        cursorborder: "none"
+    });
+  }
+
+  remUser (username) {
+    print('Rem User: '+ username);
+    this.setState ((prev, props) =>
+      ({users : prev.users.filter(el => el.name !== username) }))
+  }
+
+  onUsers (users) {
+    if (users.constructor !== Array)
+      users = [users];
+
+    print('Received users ' + users.length);
+    this.setState((prev, props) => {
+      var newUsers = users.filter(el => !prev.users.find(u => u.name === el.name))
+      return {users: prev.users.concat(newUsers)}
+    });
+  }
+
+  // Select User
   onClick () {
     // TODO
   }
 
-  componentDidMount() {
-      $(".list-friends").niceScroll({
-        cursorcolor: "#696c75",
-        cursorwidth: "6px",
-        cursorborder: "none"
-      });
-  }
-
   render () {
-    console.log("USer List");
+    console.log("Render User List");
 
     return (
       <ul className="list-friends">
-        { this.props.users.map((user) => 
+        { this.state.users.map((user) =>
           (<User key={user.name} name={user.name} onClick={this.onClick}/> )
         )}
       </ul>

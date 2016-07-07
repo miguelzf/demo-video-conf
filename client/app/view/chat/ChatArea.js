@@ -23,12 +23,28 @@ var Message = React.createClass({
 
 export default class ChatArea extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = { msgs: [] };
+    this.onMsgs  = this.onMsgs.bind(this);
+  }
+
   componentDidMount() {
+    this.props.socket.on('messages',  this.onMsgs);
+
     $(".messages").niceScroll({
       cursorcolor: "#cdd2d6",
       cursorwidth: "6px",
       cursorborder: "none"
     });
+  }
+
+  onMsgs (msgs) {
+    if (msgs.constructor !== Array)
+      msgs = [msgs];
+    this.setState((prev, props) => ({
+      msgs: prev.msgs.concat(msgs)
+    }));
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -41,7 +57,7 @@ export default class ChatArea extends React.Component {
     console.log("Render Chat Area");
     return (
       <ul className="messages">
-      { this.props.msgs.map((msg) => 
+      { this.state.msgs.map((msg) =>
         <Message key={msg.time.toString()} name={msg.name} msg={msg.msg} time={msg.time} />
       )}
       </ul>
