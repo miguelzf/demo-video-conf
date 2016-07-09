@@ -13,10 +13,9 @@ export default class ChatApp extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { msgs: [], socket: null, username: curruser };
+    this.state = { socket: null, username: curruser };
 
   }
-
 
   componentWillMount() {
     print("Connect to Socket.IO server at " + host);
@@ -52,16 +51,6 @@ export default class ChatApp extends React.Component {
         <UserList socket={this.state.socket} user={this.state.username}> </UserList>
 
         <div className="chat">
-          <div className="top">
-            <div className="avatar">
-              <img width="50" height="50" src="person.jpg" />
-            </div>
-            <div className="info">
-              <div className="name">{this.state.username}</div>
-              <div className="count">{this.state.msgs.length} messages</div>
-            </div>
-            <i className="fa fa-star"></i>
-          </div>
           <ChatArea  socket={this.state.socket} user={this.state.username}></ChatArea>
           <ChatInput socket={this.state.socket} user={this.state.username}></ChatInput>
         </div>

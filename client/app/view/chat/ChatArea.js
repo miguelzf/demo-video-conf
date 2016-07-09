@@ -55,12 +55,25 @@ export default class ChatArea extends React.Component {
 
   render (){
     console.log("Render Chat Area");
+
     return (
+     <div>
+      <div className="top">
+        <div className="avatar">
+          <img width="50" height="50" src="person.jpg" />
+        </div>
+        <div className="info">
+          <div className="name">{this.props.user}</div>
+          <div className="count">{this.state.msgs.length} messages</div>
+        </div>
+        <i className="fa fa-star"></i>
+      </div>
       <ul className="messages">
       { this.state.msgs.map((msg) =>
         <Message key={msg.time.toString()} name={msg.name} msg={msg.msg} time={msg.time} />
       )}
       </ul>
+     </div>
     )
   }
 }
