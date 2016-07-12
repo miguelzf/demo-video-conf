@@ -31,7 +31,7 @@ module.exports = function chatserver(httpapp, users) {
 
     const sendUserList = function () {
       var uservals = Object.keys(users).map(function(k) { return users[k]; });
-      print("Send Users List:", uservals);
+      //print("Send Users List:", uservals);
       socket.emit('users', uservals);
     };
 

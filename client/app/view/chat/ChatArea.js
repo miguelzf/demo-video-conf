@@ -77,5 +77,3 @@ export default class ChatArea extends React.Component {
     )
   }
 }
-
-

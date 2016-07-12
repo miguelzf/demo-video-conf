@@ -1,6 +1,8 @@
 {
   "name": "demo-video-chat",
   "version": "0.0.0",
+  "description": "Demo for a prospective Video-Conf/Chat App",
+  "author": "Miguel Ferreira",
   "scripts": {
     "start": "node server/server.js",
     "dev": "nodemon server/server.js",
@@ -8,6 +10,10 @@
     "test-client": "mocha test/client/ --compilers js:babel-register --require=env-test",
     "test-server": "mocha test/server/ --require=env-test",
     "postinstall": "jspm install"
+  },
+  "engines" : {
+    "node" : "^6.9.2",
+    "npm": "^3.3.6"
   },
   "dependencies": {
     "body-parser": "^1.15.2",

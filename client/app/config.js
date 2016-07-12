@@ -1,4 +1,5 @@
 System.config({
+  baseURL: "/",
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
@@ -7,7 +8,6 @@ System.config({
       "optimisation.modules.system"
     ]
   },
-  baseURL: "/",
 //  production: true,
   paths: {
     "github:*": "jspm_packages/github/*",
@@ -21,7 +21,7 @@ System.config({
     "clean-css": "npm:clean-css@3.4.23",
     "core-js": "npm:core-js@1.2.7",
     "css": "github:systemjs/plugin-css@0.1.32",
-    "react": "npm:react@15.4.1",
+    "react": "npm:react@15.4.2",
     "react-dom": "npm:react-dom@15.4.1",
     "socket.io": "npm:socket.io@1.7.2",
     "socket.io-client": "github:socketio/socket.io-client@1.7.2",
@@ -515,9 +515,9 @@ System.config({
       "loose-envify": "npm:loose-envify@1.3.0",
       "object-assign": "npm:object-assign@4.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
-      "react": "npm:react@15.4.1"
+      "react": "npm:react@15.4.2"
     },
-    "npm:react@15.4.1": {
+    "npm:react@15.4.2": {
       "fbjs": "npm:fbjs@0.8.8",
       "loose-envify": "npm:loose-envify@1.3.0",
       "object-assign": "npm:object-assign@4.1.0",
