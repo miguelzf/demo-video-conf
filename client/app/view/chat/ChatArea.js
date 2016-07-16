@@ -66,6 +66,7 @@ export default class ChatArea extends React.Component {
           <div className="name">{this.props.user}</div>
           <div className="count">{this.state.msgs.length} messages</div>
         </div>
+        <span className="goback"><a href="/"><button className="btn btn-primary">Change username</button></a></span>
         <i className="fa fa-star"></i>
       </div>
       <ul className="messages">

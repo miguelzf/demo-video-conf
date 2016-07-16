@@ -1,17 +1,26 @@
 'use strict';
 
-var messages = [];
 function print(s,o) {
   if (o) console.log(s,o);
   else console.log(s);
 }
 
+var getRandomInt = function(min, max) {
+  if (!max) {
+    max = min;
+    min = 0;
+  }
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+var messages = [];
+
 module.exports = function chatserver(httpapp, users) {
 
 // test data:
   for (var i = 0; i < 10; i++) {
-    var msg = {name: 'teste'+i, msg: 'nsdgdfsgdf  sdhg dsfaj '+i,
-     time: new Date(Date.now()+i*100000), color: get_random_color(), sid: null};
+    var msg = { name: 'teste'+i, msg: 'Hi ho ho! '+i+' '+ Math.random().toString(36).substring(getRandomInt(0, 30)),
+                time: new Date(Date.now()+i*100000), color: get_random_color(), sid: null};
     messages.push(msg);
   }
 

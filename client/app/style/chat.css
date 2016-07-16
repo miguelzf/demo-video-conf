@@ -79,7 +79,7 @@ body {
       -ms-flex-direction: column;
           flex-direction: column;
   vertical-align: 40px;
-  width: calc(100% - 65px - 50px);
+  width: 60%;
 }
 .ui .chat .info .name {
   font-weight: 600;
@@ -88,10 +88,16 @@ body {
 .ui .chat .info .count {
   color: #6d738d;
 }
-.ui .chat i.fa {
+.ui .chat .fa {
   color: #d6d9de;
   vertical-align: 25px;
 }
+
+.ui .chat .goback {
+  vertical-align: 25px;
+  padding-right: 50px;
+}
+
 .ui .avatar > img,
 .ui .list-friends img {
   border-radius: 50%;
