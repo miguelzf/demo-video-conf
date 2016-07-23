@@ -23,26 +23,26 @@ export default class ChatApp extends React.Component {
     this.setState({socket: socket});
 
     // Server sent an error
-    socket.on('errorr', function (msg) {
+    socket.on('chat:error', function (msg) {
       alert('ERROR!!: ' + msg);
       socket.close();
       window.location.href = '/';
     });
 
     // Server sent an error
-    socket.on('error', function (msg) {
+    socket.on('chat:error', function (msg) {
       alert('Connection ERROR!!: ' + msg);
       socket.close();
       window.location.href = '/';
     })
 
-    socket.on('disconnect', function (msg) {
+    socket.on('chat:disconnect', function (msg) {
       console.error("Connection lost");
       socket.close();
     });
 
     print("Send User: " + this.state.username);
-    socket.emit('user', this.state.username);
+    socket.emit('chat:user', this.state.username);
   }
 
   render(){

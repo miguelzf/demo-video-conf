@@ -20,7 +20,7 @@ export default  class ChatInput extends React.Component {
   sendMsg() {
     var text = this.state.text.slice();
     this.setState({text: ''});
-    this.props.socket.emit('message', {user: this.props.username, msg: text});
+    this.props.socket.emit('chat:message', {user: this.props.username, msg: text});
   }
 
   catchEnter(e) {

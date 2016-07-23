@@ -30,7 +30,7 @@ export default class ChatArea extends React.Component {
   }
 
   componentDidMount() {
-    this.props.socket.on('messages',  this.onMsgs);
+    this.props.socket.on('chat:messages',  this.onMsgs);
 
     $(".messages").niceScroll({
       cursorcolor: "#cdd2d6",

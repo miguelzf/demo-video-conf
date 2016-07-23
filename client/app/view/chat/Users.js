@@ -30,9 +30,9 @@ export default class UserList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.socket.on('users',  this.onUsers);
-    this.props.socket.on('addUser', this.onUsers);
-    this.props.socket.on('remUser', this.remUser);
+    this.props.socket.on('chat:users',  this.onUsers);
+    this.props.socket.on('chat:addUser', this.onUsers);
+    this.props.socket.on('chat:remUser', this.remUser);
 
     $(".list-friends").niceScroll({
         cursorcolor: "#696c75",
