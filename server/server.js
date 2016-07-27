@@ -34,8 +34,22 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
-// Start socket.io chat server
-var chatserver = require('./chatserver')(server, users);
+var io = require('socket.io').listen(server);
+
+// Socket.IO server
+io.on('connection', function(socket) {
+
+  console.log('New Connecton! from id ' + socket.id)
+  console.log("Socket has " + io.engine.clientsCount + " clients");
+
+  // both chat and video use the same http PORT,
+  // load up handlers for both router apps
+
+  var chatserver = require('./chatserver')(io, socket, users);
+
+  var videoserver = require('./videoserver')(io, socket);
+});
+
 
 server.listen(port);
 server.on('listening', onListening);

@@ -82,8 +82,7 @@ app.get('/', (req, res, next) => {
 });
 
 
-// Users and chat
-
+// Demo transient user accounts
 const users = {};
 
 // Return list of users online
@@ -92,58 +91,102 @@ app.get('/chat/users', (req, res, next) => {
 });
 
 app.get('/chat', (req, res, next) => {
-  var u = req.flash('user');
+  var serverLocation = req.headers.host;
+  var user = req.flash('user');
+
   // testdata:
-  if (!u || u.length == 0) {
-    var u = 'guest' + getRandomInt(1000000);
-    users[u] = {name: u, ip: '127.0.0.1'};
+  if (!user || user.length == 0) {
+    var user = 'guest' + getRandomInt(1000000);
+    users[user] = {name: user, ip: '127.0.0.1'};
   }
 
-  if (!u || !users[u]) {
-    const error = {
+  if (!user || !users[user]) {
+    return next({
       type: 'Bad username',
       status: 404,
-      message: 'User name "' + u + '" missing or invalid.',
+      message: 'User name "' + user + '" missing or invalid.',
       //stack: new Error().stack
-    }
-    return next(error);
+    });
   }
 
-  var serverLocation = req.headers.host;
-  res.render('chat', {user: u, host: serverLocation});
+  res.render('chat', {user: user, host: serverLocation});
 });
 
 // enter chat
-app.post('/chat/', (req, res, next) => {
-  print(req.body);
-  const user = req.body.username;
+app.post('/chat/', checkUser, (req, res, next) => {
+  const user = req.body.user;
   const ip = req.connection.remoteAddress;
   print("ADD user " + user);
 
+  users[user] = {name: user, ip: ip};
+  res.redirect('/chat');
+});
+
+app.post('/video', checkUser, (req, res, next) => {
+  const user = req.body.user;
+  const partner = req.body.partner;
+  var serverLocation = req.headers.host;
+
+  print("CALL " + user + " to " + partner);
+
+  if (!partner) {
+    return next({
+      type: 'Bad username',
+      status: 404,
+      message: 'Partner name "' + partner + '" missing or invalid.',
+      //stack: new Error().stack
+    });
+  }
+
+  if (!users[partner]) {
+    return next({
+      type: 'Partner not found',
+      status: 404,
+      message: 'Partner name "' + partner + '" left.',
+      //stack: new Error().stack
+    });
+  }
+
+  res.render('videoconf', {user: user, partner: partner, host: serverLocation, initiator: user});
+});
+
+// to test
+app.get('/video', (req, res, next) => {
+  var user = 'mike', partner = 'boo';
+  users[user] = {name: user, ip: '127.0.0.1'};
+  users[partner] = {name: partner, ip: '127.0.0.1'};
+  var serverLocation = req.headers.host;
+
+  res.render('videoconf', {user: user, partner: partner, host: serverLocation, initiator: user});
+});
+
+app.get('/video2', (req, res, next) => {
+  var user = 'boo', partner = 'mike';
+  users[user] = {name: user, ip: '127.0.0.1'};
+  users[partner] = {name: partner, ip: '127.0.0.1'};
+  var serverLocation = req.headers.host;
+
+  res.render('videoconf', {user: user, partner: partner, host: serverLocation, initiator: partner });
+});
+
+
+function checkUser(req, res, next) {
+  const user = req.body.user;
+  const partner = req.body.partner;
+
   if (!user) {
-    const error = {
+    return next({
       type: 'Must specify user',
       status: 404,
       message: 'Received invalid or null user',
       //stack: new Error().stack
-    }
-    return next(error);
+    });
   }
 
-  if (users[user]) {
-    const error = {
-      type: 'Already Exists',
-      status: 404,
-      message: 'User name "' + user + '" already exists.',
-      //stack: new Error().stack
-    }
-    return next(error);
-  }
-  users[user] = {name: user, ip: ip};
   req.flash('user', user);
-  res.redirect('/chat');
-});
-
+  req.flash('partner', partner);
+  return next();
+}
 
 
 // catch 404 and forward to error handler

@@ -111,9 +111,12 @@ export default class UserList extends React.Component {
 
         <div className="left-bottom">
         { (this.state.activeUser !== '') ?
-           (<button className="btn btn-md btn-primary">
-                Video Call with {this.state.activeUser}
-                </button>)
+           (<form action="video" method="post">
+              <input id="user" name="user" value={this.props.user} hidden="hidden" readOnly="readOnly" />
+              <input id="partner" name="partner" value={this.state.activeUser} hidden="hidden" readOnly="readOnly" />
+              <button type="submit" className="btn btn-primary">Video Call with {this.state.activeUser}</button>
+            </form>
+           )
            : []
         }
         </div>

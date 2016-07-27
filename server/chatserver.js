@@ -15,7 +15,7 @@ var getRandomInt = function(min, max) {
 
 var messages = [];
 
-module.exports = function chatserver(httpapp, users) {
+module.exports = function chatserver(io, socket, users) {
 
 // test data:
   for (var i = 0; i < 10; i++) {
@@ -26,30 +26,8 @@ module.exports = function chatserver(httpapp, users) {
 
   for (var i = 0; i < 2; i++)
     users['test'+i] = {name: 'test'+i, ip: '127.0.0.1', color: get_random_color(), sid: null};
+
 /////////////
-
-  var io = require('socket.io').listen(httpapp);
-
-  // Socket server
-  io.on('connection', function(socket) {
-
-    var thisocket = socket;
-
-    print('New Connecton! from id ' + socket.id)
-//    print(socket)
-
-    const sendUserList = function () {
-      var uservals = Object.keys(users).map(function(k) { return users[k]; });
-      //print("Send Users List:", uservals);
-      socket.emit('chat:users', uservals);
-    };
-
-    sendUserList();
-
-    // Send the last messages
-    var lasmsg = messages.slice(messages.length-10, messages.length-1);
-    socket.emit('chat:messages', lasmsg.reverse());
-    print("Last Msgs:" + lasmsg.reverse());
 
     // When a new user arrive
     socket.on('chat:user', function (username) {
@@ -68,6 +46,16 @@ module.exports = function chatserver(httpapp, users) {
         return;
       }
 
+      // send users to new client, except own user
+      var uservals = Object.keys(users).map(k => users[k])
+                                       .filter(u => u.name !== username);
+      socket.emit('chat:users', uservals);
+
+      // Send the last messages
+      var lasmsg = messages.slice(messages.length-10, messages.length-1);
+      socket.emit('chat:messages', lasmsg.reverse());
+      print("Last Msgs:" + lasmsg.reverse());
+
       var user    = users[username];
       user.sid    = socket.id;
       user.color  = get_random_color();
@@ -81,7 +69,7 @@ module.exports = function chatserver(httpapp, users) {
     });
 
     // Request for updated users lists
-    socket.on('chat:reqUsers',sendUserList);
+    //socket.on('chat:reqUsers',sendUserList);
 
     socket.on('chat:reqMessages', function () {
       print('Request for updated users lists\n');
@@ -93,7 +81,7 @@ module.exports = function chatserver(httpapp, users) {
     });
 
     // When a user leaves
-    socket.on('chat:disconnect', function () {
+    socket.on('disconnect', function () {
       var user = socket.user || {};
       print('User disconnected: ' + user.name);
       if (!user) return;
@@ -115,8 +103,6 @@ module.exports = function chatserver(httpapp, users) {
       // Send to all
       io.emit('chat:messages', [msg]);
     });
-
-  });
 }
 
 

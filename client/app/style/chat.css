@@ -12,15 +12,19 @@ body {
 body {
   overflow: hidden;
   font-family: 'Open Sans', sans-serif;
+/*
   background-image: -webkit-linear-gradient(top right, rgba(255, 255, 255, 0.6), transparent 60%, rgba(0, 0, 0, 0.6)), -webkit-linear-gradient(bottom right, #a0d3e4, #97d1e7);
   background-image: linear-gradient(to bottom left, rgba(255, 255, 255, 0.6), transparent 60%, rgba(0, 0, 0, 0.6)), linear-gradient(to top left, #a0d3e4, #97d1e7);
+*/
 }
 .ui {
   margin: 10px auto;
   height: 85%;
+/*
   background-color: #fff;
-  border-radius: 3px;
-  box-shadow: 0 0 25px #3a9fc4;
+*/
+  box-shadow: 0 0 10px #3a9fc4;
+  border-radius: 5px;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -webkit-flex-direction: row;
