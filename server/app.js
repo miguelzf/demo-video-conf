@@ -61,6 +61,15 @@ var getRandomInt = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+function get_random_color() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;
+}
+
 
 // Router for '/chat'
 // var chatrouter = require('./chat')
@@ -84,6 +93,10 @@ app.get('/', (req, res, next) => {
 
 // Demo transient user accounts
 const users = {};
+
+for (var i = 0; i < 2; i++)
+  users['test'+i] = {name: 'test'+i, ip: '127.0.0.1', color: get_random_color(), sid: null};
+
 
 // Return list of users online
 app.get('/chat/users', (req, res, next) => {
@@ -122,57 +135,60 @@ app.post('/chat/', checkUser, (req, res, next) => {
   res.redirect('/chat');
 });
 
+
+function checkPartner(partner) {
+  if (!partner) {
+    return {
+      type: 'Bad username',
+      status: 404,
+      message: 'Partner name "' + partner + '" missing or invalid.',
+      //stack: new Error().stack
+    };
+  }
+
+  if (!users[partner]) {
+    return {
+      type: 'Partner not found',
+      status: 404,
+      message: 'Partner name "' + partner + '" left.',
+      //stack: new Error().stack
+    };
+  }
+  return null;
+}
+
 app.post('/video', checkUser, (req, res, next) => {
   const user = req.body.user;
   const partner = req.body.partner;
   var serverLocation = req.headers.host;
 
   print("CALL " + user + " to " + partner);
+  var err = checkPartner(partner);
+  if (err)
+    return next(err);
 
-  if (!partner) {
-    return next({
-      type: 'Bad username',
-      status: 404,
-      message: 'Partner name "' + partner + '" missing or invalid.',
-      //stack: new Error().stack
-    });
-  }
-
-  if (!users[partner]) {
-    return next({
-      type: 'Partner not found',
-      status: 404,
-      message: 'Partner name "' + partner + '" left.',
-      //stack: new Error().stack
-    });
-  }
-
-  res.render('videoconf', {user: user, partner: partner, host: serverLocation, initiator: user});
+  res.render('videoconf', {user: user, partner: partner, host: serverLocation, initiator: user });
 });
 
-// to test
-app.get('/video', (req, res, next) => {
-  var user = 'mike', partner = 'boo';
-  users[user] = {name: user, ip: '127.0.0.1'};
-  users[partner] = {name: partner, ip: '127.0.0.1'};
+
+app.get('/video', checkUser, (req, res, next) => {
+  const user = req.query.user;
+  const partner = req.query.partner;
   var serverLocation = req.headers.host;
 
-  res.render('videoconf', {user: user, partner: partner, host: serverLocation, initiator: user});
-});
+  print("CALL " + user + " to " + partner);
 
-app.get('/video2', (req, res, next) => {
-  var user = 'boo', partner = 'mike';
-  users[user] = {name: user, ip: '127.0.0.1'};
-  users[partner] = {name: partner, ip: '127.0.0.1'};
-  var serverLocation = req.headers.host;
+  var err = checkPartner(partner);
+  if (err)
+    return next(err);
 
   res.render('videoconf', {user: user, partner: partner, host: serverLocation, initiator: partner });
 });
 
 
 function checkUser(req, res, next) {
-  const user = req.body.user;
-  const partner = req.body.partner;
+  const user    = (req.method == 'POST' ? req.body.user    : req.query.user);
+  const partner = (req.method == 'POST' ? req.body.partner : req.query.partner);
 
   if (!user) {
     return next({

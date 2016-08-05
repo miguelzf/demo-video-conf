@@ -58,7 +58,7 @@ var socket = io.connect();
 
 
 if (isInitiator === true || isInitiator === 'true') {
-  socket.emit('video:create', room);
+  socket.emit('video:create', room, partner);
   console.log('User ' + user + ' attempt to create room to ' + partner, room);
 }
 else {

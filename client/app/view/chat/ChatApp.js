@@ -41,6 +41,13 @@ export default class ChatApp extends React.Component {
       socket.close();
     });
 
+    var that = this;
+    socket.on('chat:joincall', function (userid) {
+      if (confirm("Received request to Join Call with " + userid + ". Accept?")) {
+        window.location = '/video?user='+that.state.username+'&partner=' +userid;
+      }
+    });
+
     print("Send User: " + this.state.username);
     socket.emit('chat:user', this.state.username);
   }

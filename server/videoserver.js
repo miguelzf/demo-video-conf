@@ -6,7 +6,7 @@ function print(s,o) {
 }
 
 
-module.exports = function videoserver(io, socket) {
+module.exports = function videoserver(io, socket, users) {
 
   // convenience function to log server messages on the client
   function log() {
@@ -42,11 +42,23 @@ module.exports = function videoserver(io, socket) {
     }
 
     socket.join(roomid);
-    log('Client ID ' + socket.id + ' created room ' + roomid);
     socket.emit('video:created', roomid, socket.id);
+
+    var match = /room\$([^$]+)\$(.+)/.exec(roomid);
+    var user = match[1], partner = match[2];
+
+    log('Client ID ' + socket.id + ' user ' + user + ' requests ' + partner + ' to join call');
+	console.log(users);
+
+    // notify other user to join room
+    setTimeout(() => {
+      var sid = users[partner].sid;
+      io.to(sid).emit('chat:joincall', user);
+    }, 400);
+
   });
 
-  socket.on('video:join', function(roomid) {
+  socket.on('video:join', function(roomid, userid) {
     log('Client ID ' + socket.id + ' joined room ' + roomid);
     io.sockets.in(roomid).emit('video:join', roomid);
     socket.join(roomid);

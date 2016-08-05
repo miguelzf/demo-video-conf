@@ -15,17 +15,14 @@ var getRandomInt = function(min, max) {
 
 var messages = [];
 
-module.exports = function chatserver(io, socket, users) {
-
 // test data:
-  for (var i = 0; i < 10; i++) {
-    var msg = { name: 'teste'+i, msg: 'Hi ho ho! '+i+' '+ Math.random().toString(36).substring(getRandomInt(0, 30)),
-                time: new Date(Date.now()+i*100000), color: get_random_color(), sid: null};
-    messages.push(msg);
-  }
+for (var i = 0; i < 10; i++) {
+  var msg = { name: 'teste'+i, msg: 'Hi ho ho! '+i+' '+ Math.random().toString(36).substring(getRandomInt(0, 30)),
+              time: new Date(Date.now()+i*100000), color: get_random_color(), sid: null};
+  messages.push(msg);
+}
 
-  for (var i = 0; i < 2; i++)
-    users['test'+i] = {name: 'test'+i, ip: '127.0.0.1', color: get_random_color(), sid: null};
+module.exports = function chatserver(io, socket, users) {
 
 /////////////
 
@@ -86,7 +83,7 @@ module.exports = function chatserver(io, socket, users) {
       print('User disconnected: ' + user.name);
       if (!user) return;
 
-      delete users[user.name];
+      // delete users[user.name];
 
       // Update the other users
       socket.broadcast.emit('chat:remUser', user.name);

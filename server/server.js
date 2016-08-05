@@ -36,6 +36,9 @@ const server = http.createServer(app);
 
 var io = require('socket.io').listen(server);
 
+var chatserver = require('./chatserver');
+var videoserver = require('./videoserver');
+
 // Socket.IO server
 io.on('connection', function(socket) {
 
@@ -45,9 +48,8 @@ io.on('connection', function(socket) {
   // both chat and video use the same http PORT,
   // load up handlers for both router apps
 
-  var chatserver = require('./chatserver')(io, socket, users);
-
-  var videoserver = require('./videoserver')(io, socket);
+  chatserver(io, socket, users);
+  videoserver(io, socket, users);
 });
 
 
