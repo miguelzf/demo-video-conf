@@ -50,8 +50,8 @@ module.exports = function chatserver(io, socket, users) {
 
       // Send the last messages
       var lasmsg = messages.slice(messages.length-10, messages.length-1);
-      socket.emit('chat:messages', lasmsg.reverse());
-      print("Last Msgs:" + lasmsg.reverse());
+      socket.emit('chat:messages', lasmsg);
+      print("Last Msgs:" + lasmsg);
 
       var user    = users[username];
       user.sid    = socket.id;

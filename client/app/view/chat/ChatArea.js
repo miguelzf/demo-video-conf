@@ -57,7 +57,7 @@ export default class ChatArea extends React.Component {
     console.log("Render Chat Area");
 
     return (
-     <div>
+     <div className="chatarea">
       <div className="top">
         <div className="avatar">
           <img width="50" height="50" src="person.jpg" />
@@ -67,7 +67,7 @@ export default class ChatArea extends React.Component {
           <div className="count">{this.state.msgs.length} messages</div>
         </div>
         <span className="goback"><a href="/"><button className="btn btn-primary">Change username</button></a></span>
-        <i className="fa fa-star"></i>
+        <i className="fa fa-star avatarstar"></i>
       </div>
       <ul className="messages">
       { this.state.msgs.map((msg) =>
