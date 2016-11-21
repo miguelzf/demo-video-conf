@@ -30,6 +30,8 @@ var pcConfig = {
   ]
 };
 
+var UseTurnServer = false;  // needed to traverse NAT with closed ports
+
 // Set up audio and video regardless of what devices are present.
 var sdpConstraints = {
   'mandatory': {
@@ -151,7 +153,7 @@ var constraints = {
 
 console.log('Getting user media with constraints', constraints);
 
-if (location.hostname !== 'localhost') {
+if (UseTurnServer && location.hostname !== 'localhost') {
   requestTurn(
     'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
   );

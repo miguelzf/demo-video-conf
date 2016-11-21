@@ -10,7 +10,7 @@ module.exports = function videoserver(io, socket, users) {
 
   // convenience function to log server messages on the client
   function log() {
-	console.log.apply(console, arguments);
+    console.log.apply(console, arguments);
     var array = ['Server:'];
     array.push.apply(array, arguments);
     socket.emit('video:log', array);
@@ -48,7 +48,6 @@ module.exports = function videoserver(io, socket, users) {
     var user = match[1], partner = match[2];
 
     log('Client ID ' + socket.id + ' user ' + user + ' requests ' + partner + ' to join call');
-	console.log(users);
 
     // notify other user to join room
     setTimeout(() => {
