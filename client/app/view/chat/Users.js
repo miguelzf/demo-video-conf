@@ -110,7 +110,7 @@ export default class UserList extends React.Component {
         </ul>
 
         <div className="left-bottom">
-        { (this.state.activeUser !== '') ?
+        { (this.state.activeUser !== '' && this.state.activeUser !== 'test0' && this.state.activeUser !== 'test1') ?
            (<form action="video" method="post">
               <input id="user" name="user" value={this.props.user} hidden="hidden" readOnly="readOnly" />
               <input id="partner" name="partner" value={this.state.activeUser} hidden="hidden" readOnly="readOnly" />

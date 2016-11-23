@@ -6,3 +6,5 @@ It contains an initial chat lobby, implemented in Socket.IO with the UI rendered
 
 The video-audio call is done via WebRTC (i.e. getUserMedia and RTCPeerConnection), with the same included Socket.IO server for signaling.
 It is based on Google's codelab samples and uses a Google's STUN server to lookup each client's public address, and TURN servers for data relay bypassing NAT and firewalls.
+
+Demo available at [heroku](http://demo-video-conf.herokuapp.com/chat)
