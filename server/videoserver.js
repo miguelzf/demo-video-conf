@@ -48,6 +48,8 @@ module.exports = function videoserver(io, socket, users) {
     var user = match[1], partner = match[2];
 
     log('Client ID ' + socket.id + ' user ' + user + ' requests ' + partner + ' to join call');
+    users[user].videosid = socket.id;
+    socket.user = user;
 
     // notify other user to join room
     setTimeout(() => {
@@ -74,6 +76,10 @@ module.exports = function videoserver(io, socket, users) {
         }
       });
     }
+  });
+
+  socket.on('disconnect', function () {
+    delete users[socket.user];
   });
 
 }

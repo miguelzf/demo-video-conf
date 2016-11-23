@@ -78,14 +78,17 @@ module.exports = function chatserver(io, socket, users) {
 
     // When a user leaves
     socket.on('disconnect', function () {
-      var user = socket.user || {};
-      print('User disconnected: ' + user.name);
+      var user = socket.user;
       if (!user) return;
 
-      // delete users[user.name];
-
-      // Update the other users
-      socket.broadcast.emit('chat:remUser', user.name);
+      setTimeout(() => {
+        if (!user.videosid) {
+          print('User disconnected: ' + user.name);
+          delete users[user.name];
+          // Update the other users
+          socket.broadcast.emit('chat:remUser', user.name);
+        }
+      }, 1000*20);
     });
 
     // When a user send a new message
