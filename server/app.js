@@ -152,7 +152,7 @@ function checkPartner(partner) {
   if (!partner) {
     return {
       type: 'Bad username',
-      status: 404,
+      status: 401,
       message: 'Partner name "' + partner + '" missing or invalid.',
       //stack: new Error().stack
     };
@@ -161,7 +161,7 @@ function checkPartner(partner) {
   if (!users[partner]) {
     return {
       type: 'Partner not found',
-      status: 404,
+      status: 401,
       message: 'Partner name "' + partner + '" left.',
       //stack: new Error().stack
     };
@@ -209,7 +209,7 @@ function checkUser(res, user) {
   if (!user) {
     return {
       type: 'Missing username',
-      status: 404,
+      status: 41,
       message: 'Received invalid or null user',
       //stack: new Error().stack
     };
