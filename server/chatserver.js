@@ -82,13 +82,13 @@ module.exports = function chatserver(io, socket, users) {
       if (!user) return;
 
       setTimeout(() => {
-        if (!user.videosid) {
+        if (!user.videosid && !user.sid) {
           print('User disconnected: ' + user.name);
           delete users[user.name];
           // Update the other users
           socket.broadcast.emit('chat:remUser', user.name);
         }
-      }, 1000*20);
+      }, 1000*60);
     });
 
     // When a user send a new message

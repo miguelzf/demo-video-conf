@@ -64,7 +64,7 @@ if (isInitiator === true || isInitiator === 'true') {
   console.log('User ' + user + ' attempt to create room to ' + partner, room);
 }
 else {
-  socket.emit('video:join', room);
+  socket.emit('video:join', room, user);
   console.log('User ' + user + ' attempt to join room to ' + partner, room);
 }
 

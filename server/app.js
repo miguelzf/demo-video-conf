@@ -18,6 +18,7 @@ app.use(favicon(path.join(__dirname, '/../client/static/favicon.ico')));
 app.use(express.static(path.join(__dirname, '/../client/static')));
 app.use(express.static(path.join(__dirname, '/../client/app')));
 
+app.use(cookieParser())
 app.use(bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));  // to support URL-encoded bodies
 
@@ -105,33 +106,44 @@ app.get('/chat/users', (req, res, next) => {
 
 app.get('/chat', (req, res, next) => {
   var serverLocation = req.headers.host;
-  var user = req.flash('user');
+  var ip = req.connection.remoteAddress;
 
-  // testdata:
-  if (!user || user.length == 0) {
-    var user = 'guest' + getRandomInt(1000000);
-    users[user] = {name: user, ip: '127.0.0.1'};
+  var user;
+  if (!req.cookies.username) {
+    user = 'guest' + getRandomInt(1000000);
+    // in a real app, should check existent
+    users[user] = {name: user, ip: ip};
+    res.cookie('username', user, { maxAge: 10*60*60*1000, httpOnly: true });
+    print("###### NEW USER " + user + " from " + ip);
   }
+  else
+    user = req.cookies.username;
 
-  if (!user || !users[user]) {
-    return next({
-      type: 'Bad username',
-      status: 404,
-      message: 'User name "' + user + '" missing or invalid.',
-      //stack: new Error().stack
-    });
-  }
+  var err = checkUser(res, user);
+  if (err) return next(err);
 
   res.render('chat', {user: user, host: serverLocation});
 });
 
 // enter chat
-app.post('/chat/', checkUser, (req, res, next) => {
+app.post('/chat/', (req, res, next) => {
+
+  if (req.cookies.username) {
+    var u = req.cookies.username;
+    if (users[u])  // old username?
+      delete users[u];
+  }
+
   const user = req.body.user;
+  var err = checkUser(res, user);
+  if (err && err.type === "Missing username")
+     return next(err);
+
   const ip = req.connection.remoteAddress;
-  print("ADD user " + user);
+  print("###### NEW USER " + user + " from " + ip);
 
   users[user] = {name: user, ip: ip};
+  res.cookie('username', user, { maxAge: 10*60*60*1000, httpOnly: true });
   res.redirect('/chat');
 });
 
@@ -157,8 +169,12 @@ function checkPartner(partner) {
   return null;
 }
 
-app.post('/video', checkUser, (req, res, next) => {
-  const user = req.body.user;
+app.post('/video', (req, res, next) => {
+  var user = req.cookies.username;
+  var err;
+  if (err = checkUser(res, user))
+     return next(err);
+
   const partner = req.body.partner;
   var serverLocation = req.headers.host;
 
@@ -171,37 +187,46 @@ app.post('/video', checkUser, (req, res, next) => {
 });
 
 
-app.get('/video', checkUser, (req, res, next) => {
-  const user = req.query.user;
+app.get('/video', (req, res, next) => {
+  var user = req.cookies.username;
+  var err;
+  if (err = checkUser(res, user))
+     return next(err);
+
   const partner = req.query.partner;
   var serverLocation = req.headers.host;
 
   print("CALL " + user + " to " + partner);
 
-  var err = checkPartner(partner);
-  if (err)
+  if (err = checkPartner(partner))
     return next(err);
 
   res.render('videoconf', {user: user, partner: partner, host: serverLocation, initiator: partner });
 });
 
 
-function checkUser(req, res, next) {
-  const user    = (req.method == 'POST' ? req.body.user    : req.query.user);
-  const partner = (req.method == 'POST' ? req.body.partner : req.query.partner);
-
+function checkUser(res, user) {
   if (!user) {
-    return next({
-      type: 'Must specify user',
+    return {
+      type: 'Missing username',
       status: 404,
       message: 'Received invalid or null user',
       //stack: new Error().stack
-    });
+    };
   }
 
-  req.flash('user', user);
-  req.flash('partner', partner);
-  return next();
+  if (!users[user]) {
+    // bug? stale data?
+     res.clearCookie('username');
+    return {
+      type: 'Bad username',
+      status: 401,
+      message: 'User name "' + user + '" missing or invalid.',
+      //stack: new Error().stack
+    };
+  }
+
+  return null;
 }
 
 

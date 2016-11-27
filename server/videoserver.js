@@ -17,12 +17,11 @@ module.exports = function videoserver(io, socket, users) {
   }
 
   socket.on('video:message', function(message, roomid) {
-    log('Client said: ', message);
+  //  log('Client said: ', message);
 
     if (message == 'bye') {
       console.log('User left room ' + roomid);
       var room = io.sockets.adapter.rooms[roomid];
-      if (room) setTimeout(()=> {log('Room ' + roomid + ' now has ' + room.length + ' client(s)');}, 1000);
     }
 
     socket.broadcast.to(roomid).emit('video:message', message);
@@ -63,6 +62,7 @@ module.exports = function videoserver(io, socket, users) {
     log('Client ID ' + socket.id + ' joined room ' + roomid);
     io.sockets.in(roomid).emit('video:join', roomid);
     socket.join(roomid);
+    socket.user = userid;
     socket.emit('video:joined', roomid, socket.id);
     io.sockets.in(roomid).emit('video:ready');
   });
@@ -79,7 +79,15 @@ module.exports = function videoserver(io, socket, users) {
   });
 
   socket.on('disconnect', function () {
-    delete users[socket.user];
+    var u = users[socket.user];
+    if (!u) return;
+
+    setTimeout(() => {
+      if (!u.videosid && !u.sid) {
+        print('User disconnected: ' + u.name);
+        delete users[u.name];
+      }
+    }, 1000*60);
   });
 
 }
