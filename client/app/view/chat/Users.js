@@ -94,7 +94,7 @@ export default class UserList extends React.Component {
   }
 
   render () {
-    console.log("Render User List with #of children = " + this.state.visibleUsers.length);
+    console.log("Render User List with " + this.state.visibleUsers.length + " users, and selected " + this.state.activeUser);
 
     return (
       <div className="left-menu">
@@ -110,12 +110,15 @@ export default class UserList extends React.Component {
         </ul>
 
         <div className="left-bottom">
-        { (this.state.activeUser !== '' && this.state.activeUser !== 'test0' && this.state.activeUser !== 'test1') ?
-           (<form action="video" method="post">
+        { (this.state.activeUser !== '') ?
+           (<form action="video" method="post" >
               <input id="user" name="user" value={this.props.user} hidden="hidden" readOnly="readOnly" />
               <input id="partner" name="partner" value={this.state.activeUser} hidden="hidden" readOnly="readOnly" />
               <input id="initiator" name="initiator" value="true" hidden="hidden" readOnly="readOnly" />
-              <button type="submit" className="btn btn-primary">Video Call with {this.state.activeUser}</button>
+              <button type="submit" className="btn btn-primary"
+                   disabled={this.state.activeUser === 'test0' || this.state.activeUser === 'test1'} >
+                 Video Call with {this.state.activeUser}
+               </button>
             </form>
            )
            : []

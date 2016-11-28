@@ -19811,7 +19811,7 @@ System.register('view/chat/Users.js', ['npm:babel-runtime@5.8.38/helpers/get.js'
           value: function render() {
             var _this4 = this;
 
-            console.log("Render User List with #of children = " + this.state.visibleUsers.length);
+            console.log("Render User List with " + this.state.visibleUsers.length + " users, and selected " + this.state.activeUser);
 
             return React.createElement(
               'div',
@@ -19841,7 +19841,8 @@ System.register('view/chat/Users.js', ['npm:babel-runtime@5.8.38/helpers/get.js'
                   React.createElement('input', { id: 'initiator', name: 'initiator', value: 'true', hidden: 'hidden', readOnly: 'readOnly' }),
                   React.createElement(
                     'button',
-                    { type: 'submit', className: 'btn btn-primary' },
+                    { type: 'submit', className: 'btn btn-primary',
+                      disabled: this.state.activeUser === 'test0' || this.state.activeUser === 'test1' },
                     'Video Call with ',
                     this.state.activeUser
                   )
