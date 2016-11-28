@@ -21,7 +21,7 @@ export default class UserList extends React.Component {
   constructor(props) {
     super(props);
     this.users = [];
-    this.state = { visibleUsers: [] , activeUser: ''};
+    this.state = { visibleUsers: [] , activeUser: '', isTestUser:''};
     this.remUser = this.remUser.bind(this);
     this.onUsers = this.onUsers.bind(this);
     this.doSearch = this.doSearch.bind(this);
@@ -67,8 +67,10 @@ export default class UserList extends React.Component {
     var auser = this.state.activeUser;
     if (auser === user)
       this.setState({activeUser: ''});
-    else
+    else {
       this.setState({activeUser: user});
+      this.setState({isTestUser: /test[0-9]/.test(user) });
+    }
   }
 
   doSearch (e) {
@@ -115,10 +117,9 @@ export default class UserList extends React.Component {
               <input id="user" name="user" value={this.props.user} hidden="hidden" readOnly="readOnly" />
               <input id="partner" name="partner" value={this.state.activeUser} hidden="hidden" readOnly="readOnly" />
               <input id="initiator" name="initiator" value="true" hidden="hidden" readOnly="readOnly" />
-              <button type="submit" className="btn btn-primary"
-                   disabled={this.state.activeUser === 'test0' || this.state.activeUser === 'test1'} >
-                 Video Call with {this.state.activeUser}
-               </button>
+              <button type="submit" className="btn btn-primary" disabled={this.state.isTestUser} >
+                 { this.state.isTestUser? 'Cannot' : ''} Video Call with {this.state.activeUser}
+              </button>
             </form>
            )
            : []
