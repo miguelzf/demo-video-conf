@@ -9,11 +9,12 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
-
+const compression = require('compression')
 
 // Setup and config Express
 
 const app = express();
+app.use(compression())
 app.use(favicon(path.join(__dirname, '/../client/static/favicon.ico')));
 app.use(express.static(path.join(__dirname, '/../client/static')));
 app.use(express.static(path.join(__dirname, '/../client/app')));
@@ -22,6 +23,7 @@ app.use(cookieParser())
 app.use(bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));  // to support URL-encoded bodies
 
+/* not used
 var session = require('express-session');
 var sessionStore = new session.MemoryStore();
 
@@ -35,7 +37,7 @@ app.use(session({secret: ssecret, resave: true, saveUninitialized: true,
                       maxAge: 30*60*1000 } }));  // 1 min to test, then 30mins
 
 app.use(flash());
-
+*/
 
 if (app.get('env') !== 'production' && app.get('env') !== 'test') {
     app.use(morgan('dev'));
